@@ -10,7 +10,7 @@ const bodyParser = require('koa-bodyparser');
 const defaultRoute = require('./routes/default');
 
 // Define our constants
-const API_PORT = <your_port_here>;
+const API_PORT = 8049;
 
 // Create a new instance of the KOA API
 const api = new Koa();

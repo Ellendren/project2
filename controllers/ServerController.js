@@ -117,7 +117,7 @@ class ServerController {
     }
 
     async deleteServer(ctx, next) {
-        console.log('Controller HIT: serverController::deleteServerr');
+        console.log('Controller HIT: serverController::deleteServer');
         return new Promise((resolve, reject) => {
             chpConnection.query({
                 sql: `DELETE FROM L6_Server WHERE id = ?;`,

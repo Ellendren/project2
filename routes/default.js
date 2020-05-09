@@ -1,5 +1,9 @@
-const dataCenterRouter = require('./datacenter');
-const serverRouter = require('./server');
+const characterRouter = require('./character');
+const testRouter = require('./test');
+const weaponRouter = require('./weapon');
+const skillRouter = require('./skill');
+const attributeRouter = require('./attribute');
+const limtRouter = require('./limit');
 const defaultRouter = require('koa-router')({
     prefix: '/api'
 });
@@ -10,8 +14,12 @@ defaultRouter.get('/', ctx => {
 });
 
 defaultRouter.use(
-    dataCenterRouter.routes(),
-    serverRouter.routes()
+    characterRouter.routes(),
+    testRouter.routes(),
+    weaponRouter.routes(),
+    skillRouter.routes(),
+    attributeRouter.routes(),
+    limtRouter.routes()
 );
 
 module.exports = api => {

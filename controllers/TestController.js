@@ -1,20 +1,20 @@
 const chpConnection = require('../database/CHPConnection');
 
-// Controller that interacts with database to retrieve data.
-class ServerController {
+// Controller that interacts with Test to retrieve data.
+class TestController {
     constructor() {
-        console.log('Server Controller Initialized!');
+        console.log('Test Controller Initialized!');
     }
 
-    // Fetches all servers
-    async servers(ctx) {
-        console.log('Controller HIT: ServerController::Severs');
+    // Fetches all Tests
+    async tests(ctx) {
+        console.log('Controller HIT: TestController::Tests');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM L6_Server';
+            const query = 'SELECT * FROM test';
 
             chpConnection.query(query, (err, res) => {
                 if (err) {
-                    reject(`Error querying CHP.L6_Server: ${err}`);
+                    reject(`Error querying CHP.test: ${err}`);
                 }
 
                 ctx.body = res;
@@ -29,16 +29,16 @@ class ServerController {
             });
     }
 
-    // Fetches a single server
-    async server(ctx) {
-        console.log('Controller HIT: ServerController::Sever');
+    // Fetches a single test
+    async test(ctx) {
+        console.log('Controller HIT: testController::test');
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM L6_Server WHERE id = ?';
-            const s = ctx.params.server;
+            const query = 'SELECT * FROM test WHERE t_name = ?';
+            const s = ctx.params.test;
 
             chpConnection.query({
                 sql: query,
-                    values: [s]
+                values: [s]
             }, (err, res) => {
                 if (err) {
                     reject(err);
@@ -55,14 +55,14 @@ class ServerController {
             });
     }
 
-    // Add a new Server
-    async addServer(ctx, next) {
-        console.log('Controller HIT:ServerController::addServer');
+    // Add a new test
+    async addTest(ctx, next) {
+        console.log('Controller HIT: TestController::addTest');
         return new Promise((resolve, reject) => {
-            const newS = ctx.request.body;
+            const newT = ctx.request.body;
             chpConnection.query({
-                sql: 'INSERT INTO L6_Server(id, hostName, L6_DataCenter, installedOn, powerOnAt) VALUES (?, ?, ?, ?, ?);',
-                values: [newS.id, newS.hostName, newS.L6_DataCenter, newS.installedOn, newS.powerOnAt]
+                sql: 'INSERT INTO test(t_name, attribute, skill_or_other, `limit`) VALUES (?, ?, ?, ?);',
+                values: [newT.name, newT.attribute, newT.skill, newT.limit]
             }, (err, res) => {
                 if (err) {
                     reject(err);
@@ -82,22 +82,21 @@ class ServerController {
             });
     }
 
-    // Update a Server
-    async updateServer(ctx, next) {
-        console.log('Controller HIT: ServerController::updateServer');
+    // Update a Test
+    async updateTest(ctx, next) {
+        console.log('Controller HIT: TestController::updateTest');
         return new Promise((resolve, reject) => {
-            const s = ctx.request.body;
+            const t = ctx.request.body;
             chpConnection.query({
                 sql: `
-                    UPDATE L6_Server 
+                    UPDATE test 
                     SET 
-                        hostName = ?,
-                        L6_DataCenter = ?,
-                        installedOn = ?,
-                        powerOnAt = ?
-                    WHERE id = ?
+                        attribute = ?,
+                        skill_or_other = ?,
+                        \`limit\` = ?
+                    WHERE t_name = ?
                     `,
-                values: [s.hostName, s.L6_DataCenter, s.installedOn, s.powerOnAt, ctx.params.server]
+                values: [t.attribute, t.skill, t.limit, ctx.params.test]
             }, (err, res) => {
                 if (err) {
                     reject(err);
@@ -116,12 +115,12 @@ class ServerController {
             });
     }
 
-    async deleteServer(ctx, next) {
-        console.log('Controller HIT: serverController::deleteServer');
+    async deleteTest(ctx, next) {
+        console.log('Controller HIT: TestController::deleteTest');
         return new Promise((resolve, reject) => {
             chpConnection.query({
-                sql: `DELETE FROM L6_Server WHERE id = ?;`,
-                values: [ctx.params.server]
+                sql: `DELETE FROM test WHERE t_name = ?;`,
+                values: [ctx.params.test]
             }, (err, res) => {
                 if (err) {
                     reject(err);
@@ -140,4 +139,4 @@ class ServerController {
     }
 }
 
-module.exports = ServerController;
+module.exports = TestController;
